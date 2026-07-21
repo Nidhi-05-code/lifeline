@@ -7,6 +7,7 @@ import com.lifeline.entity.Role;
 import com.lifeline.entity.User;
 import com.lifeline.enums.RoleType;
 import com.lifeline.exception.ResourceAlreadyExistsException;
+import com.lifeline.jwt.JwtService;
 import com.lifeline.repository.RoleRepository;
 import com.lifeline.repository.UserRepository;
 import com.lifeline.service.UserService;
@@ -19,13 +20,17 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           JwtService jwtService) {
+
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -50,9 +55,7 @@ public class UserServiceImpl implements UserService {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
-
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
         user.setRole(role);
 
         userRepository.save(user);
@@ -63,6 +66,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public AuthResponseDTO login(LoginRequestDTO request) {
 
-        return new AuthResponseDTO(null, "Login Coming Soon");
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() ->
+                        new RuntimeException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        String token = jwtService.generateToken(user.getEmail());
+
+        return new AuthResponseDTO(token, "Login Successful");
     }
 }
