@@ -19,6 +19,10 @@ public class EmergencyRequest extends BaseEntity {
     @JoinColumn(name = "patient_id", nullable = false)
     private User patient;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ambulance_id")
+    private Ambulance ambulance;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EmergencyType emergencyType;

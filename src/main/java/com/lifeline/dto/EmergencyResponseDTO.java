@@ -27,4 +27,10 @@ public class EmergencyResponseDTO {
     private EmergencyStatus status;
 
     private EmergencyPriority priority;
+
+    private Long ambulanceId;
+
+    private String vehicleNumber;
+
+    private String driverName;
 }

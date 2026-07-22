@@ -13,6 +13,7 @@ public interface EmergencyService {
             EmergencyRequestDTO requestDTO
     );
 
+    EmergencyResponseDTO assignAmbulance(Long emergencyId, Long ambulanceId);
 
     List<EmergencyResponseDTO> getAllEmergencies();
 

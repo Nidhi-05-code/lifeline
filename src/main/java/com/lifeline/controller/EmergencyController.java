@@ -75,6 +75,15 @@ public class EmergencyController {
 
     }
 
+    @PutMapping("/{id}/assign/{ambulanceId}")
+    public ResponseEntity<EmergencyResponseDTO> assignAmbulance(
+            @PathVariable Long id,
+            @PathVariable Long ambulanceId) {
+
+        return ResponseEntity.ok(
+                emergencyService.assignAmbulance(id, ambulanceId)
+        );
+    }
 
 
     @DeleteMapping("/{id}")

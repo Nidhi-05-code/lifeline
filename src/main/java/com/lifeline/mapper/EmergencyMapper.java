@@ -39,6 +39,14 @@ public class EmergencyMapper {
                             + emergency.getPatient().getLastName()
             );
         }
+        if (emergency.getAmbulance() != null) {
+
+            response.setAmbulanceId(emergency.getAmbulance().getId());
+
+            response.setVehicleNumber(emergency.getAmbulance().getVehicleNumber());
+
+            response.setDriverName(emergency.getAmbulance().getDriverName());
+        }
 
         response.setEmergencyType(
                 emergency.getEmergencyType()
